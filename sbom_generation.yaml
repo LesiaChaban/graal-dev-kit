@@ -22,6 +22,10 @@ steps:
     command: |
       export PATH=$JAVA_HOME/bin:$PATH
   - type: Command
+    name: "Change the ownership of items in the npm cache"
+    command: |
+      chown -R 1000:1000 "/root/.gradle"
+  - type: Command
     name: "Run Gradle cyclonedxBom command"
     command: |
       # For more details, visit https://github.com/CycloneDX/cyclonedx-gradle-plugin/blob/master/README.md
