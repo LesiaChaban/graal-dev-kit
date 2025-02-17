@@ -33,7 +33,7 @@ steps:
             }
           }
           dependencies {
-            classpath "org.cyclonedx:cyclonedx-gradle-plugin:2.1.0"
+            classpath "org.cyclonedx:cyclonedx-gradle-plugin:2.0.0"
           }
         }
         allprojects {
