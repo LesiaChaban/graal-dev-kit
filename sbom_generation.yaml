@@ -1,4 +1,4 @@
-# Copyright (c) 2023, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2025, Oracle and/or its affiliates. All rights reserved.
 
 # This OCI DevOps build specification file [1] generates a Software Bill of Materials (SBOM) of the repository.
 # The file is needed to run checks for third-party vulnerabilities and business approval according to Oracle’s GitHub policies.
@@ -8,19 +8,16 @@ version: 0.1
 component: build
 timeoutInSeconds: 1000
 shell: bash
-
 env:
   variables:
-    "JAVA_HOME" : "/usr/lib64/graalvm/graalvm21-ee-java11"
+    "JAVA_HOME": "/usr/lib64/graalvm/graalvm22-ee-java17"
 steps:
   - type: Command
-    name: "Installing the Oracle GraalVM 21 for JDK 11"
+    name: "Update graalvm version"
     command: |
-      yum -y install graalvm21-ee-11-jdk
-  - type: Command
-    name: "Setting the JAVA_PATH"
-    command: |
+      yum -y install graalvm22-ee-17-jdk 
       export PATH=$JAVA_HOME/bin:$PATH
+
   - type: Command
     name: "Run Gradle cyclonedxBom command"
     command: |
@@ -33,8 +30,11 @@ steps:
             }
           }
           dependencies {
-            classpath "org.cyclonedx:cyclonedx-gradle-plugin:2.0.0"
+            classpath "org.cyclonedx:cyclonedx-gradle-plugin:1.7.4"
           }
+        }
+        gradle.rootProject {
+         group= "gdk"
         }
         allprojects {
           apply plugin:org.cyclonedx.gradle.CycloneDxPlugin
@@ -49,7 +49,7 @@ steps:
           }
         }
       EOF
-      gradle --init-script init.gradle cyclonedxBom -info
+      ./gradlew --init-script init.gradle cyclonedxBom -info
 outputArtifacts:
   - name: artifactSBOM
     type: BINARY
